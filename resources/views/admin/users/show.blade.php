@@ -28,11 +28,13 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Название</th>
-                                            <th>Автор</th>
-                                            <th>Тип</th>
-                                            <th>Статус</th>
-                                            <th>Действия</th>
+                                            <th>login</th>
+                                            <th>name</th>
+                                            <th>phone</th>
+                                            <th>email</th>
+                                            <th>role</th>
+                                            <th>created_at</th>
+                                            <th>updated_at</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -41,22 +43,6 @@
                                                 <td>{{ $card->id }}</td>
                                                 <td>{{ $card->title }}</td>
                                                 <td> <a class="text-decoration-none text-dark hover:text-blue-500" href="{{ route('admin.users.view', $card->user) }}">{{ $card->author }}</a></td>
-                                                <td>
-                                                    @if($card->type === 'share')
-                                                        <span class="badge bg-success">Готов поделиться</span>
-                                                    @else
-                                                        <span class="badge bg-primary">Хочу в библиотеку</span>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if($card->status === 'approved')
-                                                        <span class="badge bg-success">Одобрено</span>
-                                                    @elseif($card->status === 'rejected')
-                                                        <span class="badge bg-danger">Отклонено</span>
-                                                    @else
-                                                        <span class="badge bg-warning">На рассмотрении</span>
-                                                    @endif
-                                                </td>
                                                 <td>
                                                     <div class="btn-group gap-2" role="group">
                                                         <a href="{{ route('admin.cards.view', $card) }}" class="btn btn-sm btn-info">Просмотр</a>

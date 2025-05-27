@@ -70,8 +70,8 @@ class AdminController extends Controller
             $query->where('created_at', $request->input('created_at'));
         }
 
-        $cards = $query->paginate(10);
-        return view('admin.cards.index', compact('cards'));
+        $cards = $query->paginate(10) ?? [];
+        return view('admin.cards.index', ['title' => 'Карточки', 'cards' => $cards]);
     }
 
     /**     

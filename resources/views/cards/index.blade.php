@@ -14,7 +14,7 @@
 
             <!-- карточки -->
             <div class="col-12 col-md-9">
-                @if ($cards->isEmpty())
+                @if (empty($cards))
                     <div class="alert alert-warning">
                         <p>Карточек нет</p>
                     </div>

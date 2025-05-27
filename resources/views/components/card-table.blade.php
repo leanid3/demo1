@@ -25,4 +25,4 @@
 </div>
 
 <!-- Модальное окно для удаления карточки -->
-<x-modal-delete :card-table="$cardTable" />
+<x-modal-delete :card-table="$cardTable" :role="auth()->user()->role" />

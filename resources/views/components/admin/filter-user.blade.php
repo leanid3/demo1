@@ -9,7 +9,7 @@
             <form action="{{ $route }}" method="get">
                 <!-- по авторам -->
                 <div class="mb-3">
-                    <label for="author" class="form-label">Автор</label>
+                    <label for="author" class="form-label"></label>
                     <input type="text" class="form-control" id="author" name="author">
                 </div>
                 <!-- по названию -->

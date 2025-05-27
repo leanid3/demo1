@@ -13,12 +13,12 @@ class CardController extends Controller
      */
     public function index(Request $request)
     {
-        $query = auth()->user()->cards()->query();
+        $query = Card::where('user_id', auth()->user()->id);
 
         if ($request->has('author')) {
             $query->where('author', 'like', '%' . $request->input('author') . '%');
         }
-    
+
         if ($request->has('title')) {
             $query->where('title', 'like', '%' . $request->input('title') . '%');
         }
@@ -27,8 +27,12 @@ class CardController extends Controller
             $query->where('type', $request->input('type'));
         }
 
+        if ($request->has('date')) {
+            $query->where('created_at', $request->input('date'));
+        }
+
         //получаем все записи
-        $cards = $query->paginate(10);
+        $cards = $query->paginate(10) ?? [];
 
         //показываем все записи
         return view('cards.index', ['title' => 'Мои карточки', 'cards' => $cards]);
@@ -54,18 +58,20 @@ class CardController extends Controller
      */
     public function store(Request $request)
     {
-
         //валидация данных
         $request->validate([
             'author' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'type' => 'required|string|max:255',
-            'rejection_reason' => 'nullable|string|max:255',
         ]);
 
+        try {
+            //создание записи   
+            auth()->user()->cards()->create($request->all());
+        } catch (\Throwable $th) {
+            dd($th);
+        }
 
-        //создание записи   
-        auth()->user()->cards()->create($request->all());
 
         //редирект после создания
         return redirect()->route('cards.index')->with('success', 'Запись успешно создана');
