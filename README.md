@@ -50,3 +50,12 @@
     выполнить 1 сидер 
         php artisan db:seed CardSeeder
 
+    ошибки 
+    resources/
+└── views/
+    └── errors/
+        ├── 403.blade.php
+        ├── 404.blade.php
+        ├── 419.blade.php
+        ├── 500.blade.php
+        └── 401.blade.php
