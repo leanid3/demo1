@@ -11,7 +11,7 @@
     <div class="container-fluid">
         <div class="row">
             <!-- фильтры -->
-            <x-admin.filter-user :route="route('admin.users')" :role="'admin'"/>
+            <x-filters.admin-users :route="route('admin.users')" :role="'admin'"/>
 
             <!-- таблица -->
             <div class="col-12 col-md-9">

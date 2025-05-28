@@ -9,7 +9,7 @@
     <div class="container-fluid">
         <div class="row">
             <!-- фильтры -->
-            <x-filter-card :route="route('admin.cards')" :role="'admin'" />
+            <x-filters.admin-cards :route="route('admin.cards')" :role="'admin'" />
 
             <!-- таблица -->
             <div class="col-12 col-md-9">
@@ -33,8 +33,7 @@
                                                     class="text-decoration-none text-dark">
                                                     ID
                                                     @if(request('sort') == 'id')
-                                                        <i
-                                                            class="fas fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
+                                                        <i class="fas fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
                                                     @endif
                                                 </a>
                                             </th>
@@ -43,8 +42,7 @@
                                                     class="text-decoration-none text-dark">
                                                     Название
                                                     @if(request('sort') == 'title')
-                                                        <i
-                                                            class="fas fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
+                                                        <i class="fas fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
                                                     @endif
                                                 </a>
                                             </th>
@@ -53,8 +51,7 @@
                                                     class="text-decoration-none text-dark">
                                                     Автор
                                                     @if(request('sort') == 'author')
-                                                        <i
-                                                            class="fas fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
+                                                        <i class="fas fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
                                                     @endif
                                                 </a>
                                             </th>
@@ -63,8 +60,7 @@
                                                     class="text-decoration-none text-dark">
                                                     Тип
                                                     @if(request('sort') == 'type')
-                                                        <i
-                                                            class="fas fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
+                                                        <i class="fas fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
                                                     @endif
                                                 </a>
                                             </th>
@@ -73,8 +69,7 @@
                                                     class="text-decoration-none text-dark">
                                                     Статус
                                                     @if(request('sort') == 'status')
-                                                        <i
-                                                            class="fas fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
+                                                        <i class="fas fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
                                                     @endif
                                                 </a>
                                             </th>
@@ -82,13 +77,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if($cards->isEmpty())
+                                        @foreach ($cards as $card)
                                             <tr>
-                                                <td colspan="6" class="text-center">Карточек не найдено</td>
-                                            </tr>
-                                        @else
-                                            @foreach ($cards as $card)
-                                                <tr>
                                                 <td>{{ $card->id }}</td>
                                                 <td>{{ $card->title }}</td>
                                                 <td>
@@ -116,34 +106,32 @@
                                                 <td>
                                                     <div class="btn-group gap-2" role="group">
                                                         <a href="{{ route('cards.show', $card) }}" class="btn btn-sm btn-info">
-                                                            <i class="fas fa-eye">просмотр</i>
+                                                            <i class="fas fa-eye"></i> Просмотр
                                                         </a>
-                                                        @if($card->status === 'pending')
+                                                        @if($card->status !== 'approved' && $card->status !== 'rejected')
                                                             <form action="{{ route('admin.approve', $card) }}" method="POST"
                                                                 class="d-inline">
                                                                 @csrf
                                                                 <button type="submit" class="btn btn-sm btn-success">
-                                                                    <i class="fas fa-check">одобрить</i>
+                                                                    <i class="fas fa-check"></i> Одобрить
                                                                 </button>
                                                             </form>
                                                             <form action="{{ route('admin.reject', $card) }}" method="POST"
                                                                 class="d-inline">
                                                                 @csrf
                                                                 <button type="submit" class="btn btn-sm btn-danger">
-                                                                    <i class="fas fa-times">отклонить</i>
+                                                                    <i class="fas fa-times"></i> Отклонить
                                                                 </button>
                                                             </form>
                                                         @endif
                                                         <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
                                                             data-bs-target="#deleteModal{{ $card->id }}">
-                                                            <i class="fas fa-trash">удалить</i>
+                                                            <i class="fas fa-trash"></i> Удалить
                                                         </button>
-                                                 
                                                     </div>
                                                 </td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -161,5 +149,4 @@
     @foreach($cards as $card)
         <x-modal-delete :card="$card" :role="'admin'" />
     @endforeach
-
 @endsection

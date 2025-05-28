@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\Filter;
 use App\Models\Card;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -49,49 +50,24 @@ class AdminController extends Controller
      */
     public function cards(Request $request)
     {
-        $query = Card::query();
 
-        // Фильтрация
-        if ($request->filled('title')) {
-            $query->where('title', 'like', '%' . $request->input('title') . '%');
-        }
 
-        if ($request->filled('author')) {
-            $query->where('author', 'like', '%' . $request->input('author') . '%');
-        }
+        $filter = new Filter(Card::query());
 
-        if ($request->filled('type')) {
-            $query->where('type', $request->input('type'));
-        }
-
-        if ($request->filled('status')) {
-            $query->where('status', $request->input('status'));
-        }
-
-        if ($request->filled('created_at')) {
-            $query->whereDate('created_at', $request->input('created_at'));
-        }
-
+        // Получаем все записи
+        $filter->filter($request);
+        
         // Сортировка
-        $sortField = $request->input('sort', 'created_at');
-        $sortDirection = $request->input('direction', 'desc');
-
-        // Проверяем, что поле сортировки допустимо
         $allowedSortFields = ['id', 'title', 'author', 'type', 'status', 'created_at'];
-        if (!in_array($sortField, $allowedSortFields)) {
-            $sortField = 'created_at';
-        }
-
-        $query->orderBy($sortField, $sortDirection);
-
-        // Получаем все записи с пагинацией
-        $cards = $query->paginate(10)->withQueryString();
+        $filter->sort($request, $allowedSortFields);
+        
+        $cards = $filter->getQuery()->paginate(10)->withQueryString();
 
         return view('admin.cards.index', [
             'title' => 'Карточки',
             'cards' => $cards,
-            'currentSort' => $sortField,
-            'currentDirection' => $sortDirection
+            'currentSort' => $request->input('sort', 'created_at'),
+            'currentDirection' => $request->input('direction', 'desc')
         ]);
     }
 
@@ -115,50 +91,24 @@ class AdminController extends Controller
      */
     public function usersView(Request $request)
     {
-        $query = User::query();
+        $filter = new Filter(User::query());
 
-        // Фильтрация
-        if ($request->filled('name')) {
-            $query->where('name', 'like', '%' . $request->input('name') . '%');
-        }
-    
-        if ($request->filled('email')) {
-            $query->where('email', 'like', '%' . $request->input('email') . '%');
-        }
-
-        if ($request->filled('role')) {
-            $query->where('role', $request->input('role'));
-        }
-
-        if ($request->filled('status')) {
-            $query->where('status', $request->input('status'));
-        }
-
-        if ($request->filled('created_at')) {
-            $query->whereDate('created_at', $request->input('created_at'));
-        }
-
+        // фильтрация
+        $filter->filter($request);
+        
         // Сортировка
-        $sortField = $request->input('sort', 'created_at');
-        $sortDirection = $request->input('direction', 'desc');
-
-        // Проверяем, что поле сортировки допустимо
         $allowedSortFields = ['id', 'name', 'email', 'role', 'status', 'created_at'];
-        if (!in_array($sortField, $allowedSortFields)) {
-            $sortField = 'created_at';
-        }
-
-        $query->orderBy($sortField, $sortDirection);
-
+        $filter->sort($request, $allowedSortFields);
+        
         // Получаем все записи с пагинацией
-        $users = $query->paginate(10)->withQueryString();
+        $users = $filter->getQuery()->paginate(10)->withQueryString();
 
         // Показываем все записи
         return view('admin.users.index', [
             'title' => 'Пользователи',
             'users' => $users,
-            'currentSort' => $sortField,
-            'currentDirection' => $sortDirection
+            'currentSort' => $request->input('sort', 'created_at'),
+            'currentDirection' => $request->input('direction', 'desc')
         ]);
     }
 

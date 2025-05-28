@@ -44,3 +44,9 @@
 
         Или получить все посты
         $user->posts
+
+    удалить все записи 
+        App\Models\Card::query()->delete()
+    выполнить 1 сидер 
+        php artisan db:seed CardSeeder
+

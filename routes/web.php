@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\CardController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\OrderController;
 use App\Http\Middleware\AdminMiddelware;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -17,6 +20,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [HomeController::class, 'index'])->name('profile');
     Route::resource('cards', CardController::class);
     Route::get('/archive', [CardController::class, 'archive'])->name('cards.archive');
+
+    
+  
+    // комментарии к курсам
+    Route::get('/comments/course/{course}', [CommentController::class, 'getCommentByCourse'])->name('comments.course');
+    // комментарии к заявкам
+    Route::get('/comments/order/{order}', [CommentController::class, 'getCommentByOrder'])->name('comments.order'); 
+    // комментарии к пользователям
+    Route::get('/comments/user/{user}', [CommentController::class, 'getCommentByUser'])->name('comments.user');
+
+    // курсы
+    Route::resource('courses', CourseController::class);
+    // заявки
+    Route::resource('orders', OrderController::class);
+    // комментарии к заявкам
+    Route::resource('comments', CommentController::class);
+
 });
 
 // Регистрация и авторизация
@@ -44,7 +64,7 @@ Route::middleware('auth', AdminMiddelware::class)->group(function () {
     Route::delete('/admin/users/{user}', [AdminController::class, 'usersDelete'])->name('admin.users.delete');
     Route::get('/admin/users/card/{user}', [AdminController::class, 'userViewCard'])->name('admin.users.card.show');
     Route::post('/admin/users/{user}/status', [AdminController::class, 'usersStatus'])->name('admin.users.status');
-    // Route::post('/admin/users/{user}/approve', [AdminController::class, 'approve'])->name('admin.approve');
-    // Route::post('/admin/users/{user}/reject', [AdminController::class, 'reject'])->name('admin.reject');
+    
+
 });
 

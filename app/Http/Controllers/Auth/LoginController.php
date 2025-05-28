@@ -31,18 +31,17 @@ class LoginController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'email' => ['required', 'email', 'exists:users,email'],
+            'login' => ['required', 'exists:users,login'],
             'password' => ['required', 'min:6'],
         ], [
-            'email.required' => 'Email обязателен',
-            'email.email' => 'Email должен быть валидным',
-            'email.exists' => 'Email не найден',
+            'login.required' => 'Логин обязателен',
+            'login.exists' => 'Логин не найден',
             'password.required' => 'Пароль обязателен',
             'password.min' => 'Пароль должен быть не менее 6 символов',
         ]);
 
 
-        if (Auth::attempt($request->only('email', 'password'))) {
+        if (Auth::attempt($request->only('login', 'password'))) {
             return redirect()->intended(route('profile', absolute: false))->with('success_login', 'Вы успешно авторизовались');
         }
         return redirect()->back()->with('error', 'логин или пароль не верны');

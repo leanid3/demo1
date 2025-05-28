@@ -58,6 +58,21 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" href="{{ route('orders.index') }}">
+                                    <i class="fas fa-address-card me-1"></i>Мои заявки
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('comments.index') }}">
+                                    <i class="fas fa-address-card me-1"></i>Мои комментарии
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('courses.index') }}">
+                                    <i class="fas fa-address-card me-1"></i>Мои курсы
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="{{ route('cards.archive') }}">
                                     <i class="fas fa-archive me-1"></i>Архив
                                 </a>

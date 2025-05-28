@@ -4,33 +4,34 @@ namespace App\Http\Controllers;
 
 use App\Models\Card;
 use Illuminate\Http\Request;
+use App\Http\Services\Filter;
 
 class CardController extends Controller
 {
 
-    /**
-     * Запрос
-     * @var \Illuminate\Database\Eloquent\Builder
-     */
-    protected $query;
-    
-    
     /**
      * Показать все записи
      * @return \Illuminate\Contracts\View\View
      */
     public function index(Request $request)
     {
-        $this->query = Card::where('user_id', auth()->user()->id);
+        $filter = new Filter(Card::where('user_id', auth()->user()->id));
+        $filter->filter($request, true);
 
-        //фильтрация
-        $this->filter($request);
+        // Сортировка
+        $allowedSortFields = ['id', 'title', 'author', 'type', 'status', 'created_at'];
+        $filter->sort($request, $allowedSortFields);
 
-        //получаем все записи
-        $cards = $this->query->paginate(10) ?? [];
+        // Получаем все записи с пагинацией
+        $cards = $filter->getQuery()->paginate(10)->withQueryString();
 
-        //показываем все записи
-        return view('cards.index', ['title' => 'Мои карточки', 'cards' => $cards]);
+        // Показываем все записи
+        return view('cards.index', [
+            'title' => 'Мои карточки',
+            'cards' => $cards,
+            'currentSort' => $request->input('sort', 'created_at'),
+            'currentDirection' => $request->input('direction', 'desc')
+        ]);
     }
 
 
