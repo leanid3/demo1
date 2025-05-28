@@ -14,5 +14,8 @@ $(document).ready(function(){
     //маска телефона
     $('#phone').mask('+7 (000) 000-00-00');
 
+    $('#remember').change(function() {
+        $('#registerButton').prop('disabled', !this.checked);
+    });
 })
 

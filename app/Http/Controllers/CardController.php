@@ -7,32 +7,27 @@ use Illuminate\Http\Request;
 
 class CardController extends Controller
 {
+
+    /**
+     * Запрос
+     * @var \Illuminate\Database\Eloquent\Builder
+     */
+    protected $query;
+    
+    
     /**
      * Показать все записи
      * @return \Illuminate\Contracts\View\View
      */
     public function index(Request $request)
     {
-        $query = Card::where('user_id', auth()->user()->id);
+        $this->query = Card::where('user_id', auth()->user()->id);
 
-        if ($request->has('author')) {
-            $query->where('author', 'like', '%' . $request->input('author') . '%');
-        }
-
-        if ($request->has('title')) {
-            $query->where('title', 'like', '%' . $request->input('title') . '%');
-        }
-
-        if ($request->has('type')) {
-            $query->where('type', $request->input('type'));
-        }
-
-        if ($request->has('date')) {
-            $query->where('created_at', $request->input('date'));
-        }
+        //фильтрация
+        $this->filter($request);
 
         //получаем все записи
-        $cards = $query->paginate(10) ?? [];
+        $cards = $this->query->paginate(10) ?? [];
 
         //показываем все записи
         return view('cards.index', ['title' => 'Мои карточки', 'cards' => $cards]);
@@ -135,5 +130,61 @@ class CardController extends Controller
 
         //редирект после удаления
         return redirect()->route('cards.index')->with('success', 'Запись успешно удалена');
+    }
+
+    /** 
+     * Страница архива
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function archive(Request $request)
+    {
+
+        $searchArr = [
+            'status' => 'rejected',
+        ];
+
+        if (auth()->user()->role !== 'admin') {
+            $searchArr['user_id'] = auth()->user()->id;
+        }
+
+        $this->query = Card::where($searchArr);
+
+        //фильтрация
+        $this->filter($request);
+
+        //получаем все записи
+        $cards = $this->query->paginate(10) ?? [];
+
+        //показываем все записи
+        return view('cards.index', ['title' => 'Архив карточек', 'cards' => $cards, 'page' => 'archive']);
+    }
+
+
+    /**
+     * Фильтрация записей
+     * @param \Illuminate\Http\Request $request
+     * @return void
+     */
+    protected function filter(Request $request)
+    {
+       
+        if ($request->has('author')) {
+            $this->query->where('author', 'like', '%' . $request->input('author') . '%');
+        }
+
+        if ($request->has('title')) {
+            $this->query->where('title', 'like', '%' . $request->input('title') . '%');
+        }
+
+        if ($request->has('type')) {
+            $this->query->where('type', $request->input('type'));
+        }
+
+        if ($request->has('date')) {
+            $this->query->where('created_at', $request->input('date'));
+        }
+
+        $this->query;
     }
 }

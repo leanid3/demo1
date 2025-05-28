@@ -1,10 +1,208 @@
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+/* шаблон */
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #2c3e50;
+    --accent-color: #e74c3c;
+    --background-color: #f8f9fa;
+    --text-color: #2c3e50;
+}
+@font-face {
+    font-family: 'Inter';
+    src: url('/fonts/inter/Inter-VariableFont_opsz,wght.ttf') format('truetype-variations');
+    font-weight: 100 900;  /* Диапазон толщины (от 100 до 900) */
+    font-style: normal;
+    font-display: swap;    /* Улучшает загрузку (FOIT → FOUT) */
+}
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+@font-face {
+    font-family: 'Inter';
+    src: url('/fonts/inter/Inter-Italic-VariableFont_opsz,wght.ttf') format('truetype-variations');
+    font-weight: 100 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 400;  /* Базовое начертание */
+    line-height: 1.6;
+}
+.navbar {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+    padding: 1rem 0;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    color: white !important;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+}
+
+.nav-link {
+    color: rgba(255,255,255,0.9) !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-link:hover {
+    color: white !important;
+    transform: translateY(-2px);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+    left: 0;
+}
+
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    animation: fadeIn 0.3s ease;
+}
+
+.dropdown-item {
+    padding: 0.7rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateX(5px);
+}
+
+main {
+    min-height: calc(100vh - 200px);
+    padding: 2rem 0;
+}
+
+.footer {
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+    color: white;
+    padding: 2rem 0;
+    margin-top: 3rem;
+}
+
+.footer p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* анимация появления */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* адаптивный дизайн */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+
+    .nav-link {
+        padding: 0.5rem !important;
+    }
+
+    main {
+        padding: 1rem 0;
+    }
+
+    .footer {
+        text-align: center;
+    }
+}
+
+/* анимация карточки */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* стили кнопок */
+.btn {
+    border-radius: 25px;
+    padding: 0.5rem 1.5rem;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    border: none;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+}
+
+
+/* профиль пользователя */
+
+.avatar-circle {
+    width: 100px;
+    height: 100px;
+    background-color: #e9ecef;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.initials {
+    font-size: 2.5rem;
+    color: #495057;
+    font-weight: bold;
+}
+
+.user-info {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+}
+
+.info-item label {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.info-item p {
+    font-size: 1rem;
+    color: #212529;
+}
+
+.card {
+    border: none;
+    border-radius: 1rem;
+}
+
+.card-header {
+    border-radius: 1rem 1rem 0 0 !important;
 }

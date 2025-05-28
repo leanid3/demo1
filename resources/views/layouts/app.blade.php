@@ -9,8 +9,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-
-
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/sass/app.scss'])
 
@@ -18,11 +16,15 @@
 
 <body>
     <div id="app">
-        <header class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <!-- хедер -->
+        <header class="navbar navbar-expand-md navbar-light shadow-sm">
             <div class="container">
+                <!-- логотип -->
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    <i class="fas fa-book-open me-2"></i>{{ config('app.name', 'Laravel') }}
                 </a>
+
+                <!-- кнопка для открытия меню мобильной версии-->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -30,51 +32,62 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
-
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
                         @guest
+                            <!--ссылки для неавторизованных пользователей -->
                             @if (Route::has('login'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                    <a class="nav-link" href="{{ route('login') }}">
+                                        <i class="fas fa-sign-in-alt me-1"></i>{{ __('Login') }}
+                                    </a>
                                 </li>
                             @endif
 
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('register') }}">
+                                        <i class="fas fa-user-plus me-1"></i>{{ __('Register') }}
+                                    </a>
                                 </li>
                             @endif
                         @else
+                            <!--ссылки для авторизованных пользователей -->
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('cards.index') }}">Мои карточки</a>
+                                <a class="nav-link" href="{{ route('cards.index') }}">
+                                    <i class="fas fa-address-card me-1"></i>Мои карточки
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('cards.archive') }}">Архив</a>
+                                <a class="nav-link" href="{{ route('cards.archive') }}">
+                                    <i class="fas fa-archive me-1"></i>Архив
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('cards.create') }}">Создать</a>
+                                <a class="nav-link" href="{{ route('cards.create') }}">
+                                    <i class="fas fa-plus-circle me-1"></i>Создать
+                                </a>
                             </li>
+                            <!-- ссылка на панель администратора -->
                             @if(Auth::user()->role === 'admin')
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('admin.index') }}">Панель администратора</a>
+                                    <a class="nav-link" href="{{ route('admin.index') }}">
+                                        <i class="fas fa-user-shield me-1"></i>Панель администратора
+                                    </a>
                                 </li>
                             @endif
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
+                                    <i class="fas fa-user-circle me-1"></i>{{ Auth::user()->name }}
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('profile') }}">
+                                        <i class="fas fa-user me-1"></i>Профиль
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                             document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                                                     document.getElementById('logout-form').submit();">
+                                        <i class="fas fa-sign-out-alt me-1"></i>{{ __('Logout') }}
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -82,32 +95,38 @@
                                     </form>
                                 </div>
                             </li>
-
                         @endguest
                     </ul>
                 </div>
             </div>
         </header>
 
-        <main class="container mt-5">
-            <h1 class="text-center mb-5">{{ $title ?? 'Главная страница' }}</h1>
+        <!-- контейнер для контента -->
+        <main class="container">
+            <!-- кнопка назад -->
+            <a href="{{ back()->getTargetUrl() }}" class="btn btn-primary mb-3">Назад</a>
+            @if(isset($title))
+                <h1 class="text-center mb-5 display-4 fw-bold">{{ $title }}</h1>
+            @endif
             <div class="row justify-content-center">
                 @yield('content')
             </div>
         </main>
-        <footer class="footer mt-5">
+
+        <!-- футер -->
+        <footer class="footer">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-6">
                                 <p class="text-center">
-                                    &copy; {{ date('Y') }} {{ config('app.name', 'Laravel') }}
+                                    <i class="fas fa-copyright me-1"></i>{{ date('Y') }} {{ config('app.name', 'Laravel') }}
                                 </p>
                             </div>
                             <div class="col-md-6">
                                 <p class="text-center">
-                                    &copy; {{ date('Y') }} {{ config('app.name', 'Laravel') }}
+                                    <i class="fas fa-heart me-1 text-danger"></i>Сделано с любовью
                                 </p>
                             </div>
                         </div>

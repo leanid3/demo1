@@ -4,7 +4,7 @@ namespace App\Policies;
 
 use App\Models\Card;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Auth;
 
 class CardPolicy
 {
@@ -35,7 +35,12 @@ class CardPolicy
      */
     public function create(User $user): bool
     {
-        return true;
+        return $user->status === 'active';
+    }
+
+    public function archive(User $user): bool
+    {
+        return Auth::check();
     }
 
     /**
@@ -43,7 +48,7 @@ class CardPolicy
      */
     public function update(User $user, Card $card): bool
     {
-        return true;
+        return $user->status === 'active';
     }
 
     /**
@@ -51,7 +56,7 @@ class CardPolicy
      */
     public function delete(User $user, Card $card): bool
     {
-        return true;
+        return $user->status === 'active';
     }
 
     /**
@@ -59,7 +64,7 @@ class CardPolicy
      */
     public function restore(User $user, Card $card): bool
     {
-        return true;
+        return $user->status === 'active';
     }
 
     /**
@@ -67,6 +72,6 @@ class CardPolicy
      */
     public function forceDelete(User $user, Card $card): bool
     {
-        return true;
+        return $user->status === 'active';
     }
 }

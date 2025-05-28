@@ -4,51 +4,31 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
-    use RegistersUsers;
 
     /**
-     * Where to redirect users after registration.
+     * Отображение представления для регистрации.
      *
-     * @var string
+     * @return \Illuminate\Contracts\View\View
      */
-    protected $redirectTo = '/login';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function create(): \Illuminate\Contracts\View\View
     {
-        $this->middleware('guest');
+        return view('auth.register');
     }
 
     /**
-     * Get a validator for an incoming registration request.
+     * Обработка входящего запроса на регистрацию.
      *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    protected function validator(array $data)
+    public function store(Request $request)
     {
-        return Validator::make($data, [
+        $request->validate([
             'name' => ['required', 'string', 'min:6', 'max:255', 'regex:/^[А-Яа-яЁё\s]+$/u'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -61,24 +41,19 @@ class RegisterController extends Controller
             'login.unique' => 'Логин уже занят.',
             'phone.unique' => 'Телефон уже занят.',
             'email.unique' => 'Email уже занят.',
+            'password.confirmed' => 'Пароли не сопадают.',
+            'password.min' => 'Пароль должен быть не менее 8 символов.',
         ]);
-    }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\Models\User
-     */
-    protected function create(array $data)
-    {
-        return User::create([
-            'name' => $data['name'],
-            'login' => $data['login'],
-            'phone' => $data['phone'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+        User::create([
+            'name' => $request->name,
+            'login' => $request->login,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
         ]);
+
+        return redirect()->route('login')->with('success_register', 'Вы успешно зарегистрировались');
     }
 
 }
