@@ -14,6 +14,9 @@ use App\Http\Controllers\Auth\HomeController;
 Route::get('/', function () {
     return view('main');
 });
+Route::get('/welcome', function () {
+    return view('welcome');
+});
 
 //маршруты для авторизованных пользователей
 Route::middleware('auth')->group(function () {

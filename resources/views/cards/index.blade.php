@@ -12,7 +12,7 @@
     <div class="container">
         <div class="row">
             <!-- фильтры -->
-            <x-filter-card :route="isset($page) && $page == 'archive' ? route('cards.archive') : route('cards.index')" :role="'user'"  />
+            <x-filters.cards :route="isset($page) && $page == 'archive' ? route('cards.archive') : route('cards.index')" :role="'user'"  />
 
             <!-- карточки -->
             <div class="col-12 col-md-9">

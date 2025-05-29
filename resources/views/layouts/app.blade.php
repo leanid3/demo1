@@ -77,19 +77,57 @@
                                     <i class="fas fa-archive me-1"></i>Архив
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('cards.create') }}">
-                                    <i class="fas fa-plus-circle me-1"></i>Создать
+                            <li class="nav-item dropdown">
+                                <a id="crudDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    <i class="fas fa-cogs me-1"></i>Управление
                                 </a>
-                            </li>
-                            <!-- ссылка на панель администратора -->
-                            @if(Auth::user()->role === 'admin')
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('admin.index') }}">
-                                        <i class="fas fa-user-shield me-1"></i>Панель администратора
+
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="crudDropdown">
+                                    <h6 class="dropdown-header">Карточки</h6>
+                                    <a class="dropdown-item" href="{{ route('cards.create') }}" data-bs-toggle="modal" data-bs-target="#cardModal">
+                                        <i class="fas fa-plus-circle me-1"></i>Создать карточку
                                     </a>
-                                </li>
-                            @endif
+                                    <a class="dropdown-item" href="{{ route('cards.index') }}">
+                                        <i class="fas fa-list me-1"></i>Список карточек
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('cards.archive') }}">
+                                        <i class="fas fa-archive me-1"></i>Архив
+                                    </a>
+
+                                    <h6 class="dropdown-header">Комментарии</h6>
+                                    <a class="dropdown-item" href="{{ route('comments.create') }}" data-bs-toggle="modal" data-bs-target="#commentModal">
+                                        <i class="fas fa-plus-circle me-1"></i>Создать комментарий
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('comments.index') }}">
+                                        <i class="fas fa-list me-1"></i>Список комментариев
+                                    </a>
+
+                                    <h6 class="dropdown-header">Заявки</h6>
+                                    <a class="dropdown-item" href="{{ route('orders.create') }}" data-bs-toggle="modal" data-bs-target="#orderModal">
+                                        <i class="fas fa-plus-circle me-1"></i>Создать заявку
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('orders.index') }}">
+                                        <i class="fas fa-list me-1"></i>Список заявок
+                                    </a>
+
+                                    <h6 class="dropdown-header">Курсы</h6>
+                                    <a class="dropdown-item" href="{{ route('courses.create') }}" data-bs-toggle="modal" data-bs-target="#courseModal">
+                                        <i class="fas fa-plus-circle me-1"></i>Создать курс
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('courses.index') }}">
+                                        <i class="fas fa-list me-1"></i>Список курсов
+                                    </a>
+
+                                    @if(Auth::user()->role === 'admin')
+                                        <div class="dropdown-divider"></div>
+                                        <h6 class="dropdown-header">Администрирование</h6>
+                                        <a class="dropdown-item" href="{{ route('admin.index') }}">
+                                            <i class="fas fa-user-shield me-1"></i>Панель администратора
+                                        </a>
+                                    @endif
+                                </div>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -127,6 +165,67 @@
                 @yield('content')
             </div>
         </main>
+
+        <!-- Модальные окна -->
+        <!-- Модальное окно для карточек -->
+        <div class="modal fade" id="cardModal" tabindex="-1" aria-labelledby="cardModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cardModalLabel">Создание карточки</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <x-forms.card :action="route('cards.store')" method="POST" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно для комментариев -->
+        <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="commentModalLabel">Создание комментария</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <x-forms.comment :action="route('comments.store')" method="POST" :cards="isset($cards) ? $cards : []" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно для заявок -->
+        <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="orderModalLabel">Создание заявки</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <x-forms.order :action="route('orders.store')" method="POST" :cards="isset($cards) ? $cards : []" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно для курсов -->
+        <div class="modal fade" id="courseModal" tabindex="-1" aria-labelledby="courseModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="courseModalLabel">Создание курса</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <x-forms.course :action="route('courses.store')" method="POST" />
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- футер -->
         <footer class="footer">

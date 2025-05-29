@@ -12,7 +12,6 @@
                 <a class="nav-link {{ request()->is('admin/users') ? 'active' : '' }}" href="{{ route('admin.users') }}">Пользователи</a>
             </li>
 
-
         </ul>
     </div>
 </nav>
